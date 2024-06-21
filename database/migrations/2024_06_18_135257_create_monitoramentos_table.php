@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('monitoramentos', function (Blueprint $table) {
             $table->id();
-            $table->date('data');
             $table->foreignId('instrumento_id')->constrained('instrumentos');
             $table->text('andamento')->nullable();
             $table->text('dificuldades')->nullable();

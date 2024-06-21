@@ -10,7 +10,6 @@ class Monitoramento extends Model
     use HasFactory;
 
     protected $fillable = [
-        'data',
         'instrumento_id',
         'andamento',
         'dificuldades',

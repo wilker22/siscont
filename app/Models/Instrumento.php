@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TipoInstrumentoEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,6 +24,10 @@ class Instrumento extends Model
         'status',
         'latitude',
         'longitude'
+    ];
+
+    protected $casts = [
+        'tipo' => TipoInstrumentoEnum::class,
     ];
 
     public function municipios()

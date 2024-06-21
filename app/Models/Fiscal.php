@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Fiscal extends Model
 {
@@ -16,12 +18,12 @@ class Fiscal extends Model
         'matricula'
     ];
 
-    public function instrumentos()
+    public function instrumentos(): HasMany
     {
         return $this->hasMany(Instrumento::class);
     }
 
-    public function unidades()
+    public function unidades(): BelongsTo
     {
         return $this->belongsTo(Unidade::class);
     }
