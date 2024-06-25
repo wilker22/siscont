@@ -22,6 +22,14 @@ class FiscalResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?string $navigationGroup = 'Cadastros';
+
+    protected static ?string $navigationLabel = 'Fiscal';
+
+    protected static ?int $navigationSort = 1;
+
 
 
     public static function form(Form $form): Form
@@ -29,7 +37,7 @@ class FiscalResource extends Resource
         return $form->columns()
             ->schema([
                 Select::make('unidade_id')
-                    ->relationship('unidade', 'sigla')
+                    ->relationship('unidades', 'sigla')
                     ->label('Gerência/Unidade')
                     ->required(),
                 TextInput::make('nome')->required(),
@@ -52,6 +60,7 @@ class FiscalResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

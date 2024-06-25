@@ -23,11 +23,22 @@ class MunicipioResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?string $navigationGroup = 'Cadastros';
+
+    protected static ?string $navigationLabel = 'Município';
+
+    protected static ?int $navigationSort = 2;
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Select::make('mesorregiao_id')->label('Mesorregião')->required(),
+                Select::make('mesorregiao_id')
+                        ->relationship('mesorregiao', 'nome')
+                        ->label('Mesorregião')
+                        ->required(),
                 TextInput::make('nome')->required(),
                 RichEditor::make('descricao'),
             ]);
@@ -37,7 +48,10 @@ class MunicipioResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('mesorregiao_id')->sortable()->searchable()->label('Mesorregião'),
+                // TextColumn::make('mesorregiao_id')
+                //         ->sortable()
+                //         ->searchable()
+                //         ->label('Mesorregião'),
                 TextColumn::make('nome')->sortable()->searchable(),
 
             ])

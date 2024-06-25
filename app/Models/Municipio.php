@@ -10,7 +10,8 @@ class Municipio extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nome', 'descricao'
+        
+        'nome','mesorregiao_id', 'descricao'
     ];
 
     public function instrumentos()
@@ -18,7 +19,7 @@ class Municipio extends Model
         return $this->belongsToMany(Instrumento::class);
     }
 
-    public function mesoregiaos()
+    public function mesorregiao()
     {
         return $this->belongsTo(Mesoregiao::class);
     }
