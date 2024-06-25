@@ -7,7 +7,9 @@ use App\Enums\TipoInstrumentoEnum;
 use App\Filament\Resources\InstrumentoResource\Pages;
 use App\Filament\Resources\InstrumentoResource\RelationManagers;
 use App\Models\Instrumento;
+use DateTime;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -28,25 +30,31 @@ class InstrumentoResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form->columns(1)
+        return $form->columns(2)
             ->schema([
-                Select::make('fiscal_id')->label('Fiscal')->required(),
+                Select::make('fiscal_id')
+                        ->relationship('fiscals', 'nome')
+                        ->label('Fiscal')
+                        ->required(),
                 Select::make('tipo')->options(TipoInstrumentoEnum::class)->searchable()->required(),
                 Select::make('status')->options(StatusInstrumentoEnum::class)->searchable()->required(),
                 TextInput::make('numero_sigec')->label('Nº SIGEC'),
                 TextInput::make('numero_transferegov')->label('Nº TRANSFEREGOV'),
-                TextInput::make('celebracao'),
-                TextInput::make('vigencia'),
+                DatePicker::make('celebracao')->date('d/m/Y'),
+                DatePicker::make('vigencia')->date('d/m/Y'),
                 RichEditor::make('objeto')->required(),
+                Select::make('municipio_id')->relationship('municipios','nome')
+                        ->multiple()
+                        ->relationship('municipios', 'nome'),
                 TextInput::make('latitude'),
                 TextInput::make('longitude'),
                 TextInput::make('entidade')->required(),
                 TextInput::make('beneficiarios'),
                 FileUpload::make('foto')->directory('fotos_instrumentos')->disk('public')->image(),
-                TextInput::make('valor_global'),
-                TextInput::make('valor_empenhado'),
-                TextInput::make('valor_liquidado'),
-                TextInput::make('valor_pago'),
+                TextInput::make('valor_global')->money('BRL'),
+                TextInput::make('valor_empenhado')->money('BRL'),
+                TextInput::make('valor_liquidado')->money('BRL'),
+                TextInput::make('valor_pago')->money('BRL'),
 
             ]);
     }
