@@ -33,9 +33,9 @@ class InstrumentoResource extends Resource
         return $form->columns(2)
             ->schema([
                 Select::make('fiscal_id')
-                        ->relationship('fiscals', 'nome')
-                        ->label('Fiscal')
-                        ->required(),
+                    ->relationship('fiscals', 'nome')
+                    ->label('Fiscal')
+                    ->required(),
                 Select::make('tipo')->options(TipoInstrumentoEnum::class)->searchable()->required(),
                 Select::make('status')->options(StatusInstrumentoEnum::class)->searchable()->required(),
                 TextInput::make('numero_sigec')->label('Nº SIGEC'),
@@ -43,18 +43,18 @@ class InstrumentoResource extends Resource
                 DatePicker::make('celebracao')->date('d/m/Y'),
                 DatePicker::make('vigencia')->date('d/m/Y'),
                 RichEditor::make('objeto')->required(),
-                Select::make('municipio_id')->relationship('municipios','nome')
-                        ->multiple()
-                        ->relationship('municipios', 'nome'),
+                Select::make('municipio_id')->relationship('municipios', 'nome')
+                    ->multiple()
+                    ->relationship('municipios', 'nome'),
                 TextInput::make('latitude'),
                 TextInput::make('longitude'),
                 TextInput::make('entidade')->required(),
                 TextInput::make('beneficiarios'),
                 FileUpload::make('foto')->directory('fotos_instrumentos')->disk('public')->image(),
-                TextInput::make('valor_global')->money('BRL'),
-                TextInput::make('valor_empenhado')->money('BRL'),
-                TextInput::make('valor_liquidado')->money('BRL'),
-                TextInput::make('valor_pago')->money('BRL'),
+                TextInput::make('valor_global'),
+                TextInput::make('valor_empenhado'),
+                TextInput::make('valor_liquidado'),
+                TextInput::make('valor_pago'),
 
             ]);
     }
