@@ -3,6 +3,7 @@
 use App\Models\Instrumento;
 use App\Models\Municipio;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,14 +20,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/many', function () {
-    // $municipio = Municipio::with('instrumentos')->find(1);
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::post('/custom/livewire/update', $handle);
+});
 
-    // $instrumento = Instrumento::find(1);
-    // $municipio->instrumentos()->detach([
-    //     2,
-    //     3
-    // ]);
-    // $municipio->refresh();
-    // dd($municipio->instrumentos);
+Livewire::setScriptRoute(function ($handle) {
+    return Route::get('/custom/livewire/livewire.js', $handle);
 });
