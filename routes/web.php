@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Instrumento;
-use App\Models\Municipio;
+
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -20,10 +19,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Livewire::setUpdateRoute(function ($handle) {
-    return Route::post('/custom/livewire/update', $handle);
-});
+// Livewire::setUpdateRoute(function ($handle) {
+//     return Route::post('siscont/public/vendor/livewire/update', $handle);
+// });
+
+// Livewire::setScriptRoute(function ($handle) {
+//     return Route::get('siscont/public/vendor/livewire/livewire.js', $handle);
+// });
+
 
 Livewire::setScriptRoute(function ($handle) {
-    return Route::get('/custom/livewire/livewire.js', $handle);
+    return Route::get('siscont/public/vendor/livewire/livewire.js', $handle);
+});
+
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::post('siscont/public/livewire/update', $handle);
 });
