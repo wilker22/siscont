@@ -15,7 +15,8 @@ class Fiscal extends Model
         'unidade_id',
         'nome',
         'email',
-        'matricula'
+        'matricula',
+        'monitoramento_id'
     ];
 
     public function instrumentos(): HasMany
@@ -23,8 +24,13 @@ class Fiscal extends Model
         return $this->hasMany(Instrumento::class);
     }
 
-    public function unidades(): BelongsTo
+    public function unidade(): BelongsTo
     {
         return $this->belongsTo(Unidade::class);
+    }
+
+    public function monitoramentos(): HasMany
+    {
+        return $this->hasMany(Monitoramento::class);
     }
 }

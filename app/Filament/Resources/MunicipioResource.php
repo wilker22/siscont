@@ -21,7 +21,7 @@ class MunicipioResource extends Resource
 {
     protected static ?string $model = Municipio::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -36,9 +36,9 @@ class MunicipioResource extends Resource
         return $form
             ->schema([
                 Select::make('mesorregiao_id')
-                        ->relationship('mesorregiao', 'nome')
-                        ->label('Mesorregião')
-                        ->required(),
+                    ->relationship('mesorregiao', 'nome')
+                    ->label('Mesorregião')
+                    ->required(),
                 TextInput::make('nome')->required(),
                 RichEditor::make('descricao'),
             ]);
@@ -48,11 +48,12 @@ class MunicipioResource extends Resource
     {
         return $table
             ->columns([
-                // TextColumn::make('mesorregiao_id')
-                //         ->sortable()
-                //         ->searchable()
-                //         ->label('Mesorregião'),
-                TextColumn::make('nome')->sortable()->searchable(),
+                TextColumn::make('nome')->label('Municípios')->sortable()->searchable(),
+                TextColumn::make('mesorregiao.nome')->badge()
+                    ->sortable()
+                    ->searchable()
+                    ->label('Mesorregião'),
+
 
             ])
             ->filters([
@@ -62,9 +63,9 @@ class MunicipioResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 

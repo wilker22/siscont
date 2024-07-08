@@ -26,14 +26,14 @@ class InstrumentoResource extends Resource
 {
     protected static ?string $model = Instrumento::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document';
 
     public static function form(Form $form): Form
     {
         return $form->columns(2)
             ->schema([
                 Select::make('fiscal_id')
-                    ->relationship('fiscals', 'nome')
+                    ->relationship('fiscal', 'nome')
                     ->label('Fiscal')
                     ->required(),
                 Select::make('tipo')->options(TipoInstrumentoEnum::class)->searchable()->required(),
@@ -63,13 +63,13 @@ class InstrumentoResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('fiscal_id')->sortable()->searchable()->label('Fiscal'),
+                TextColumn::make('fiscal.nome')->sortable()->searchable()->label('Fiscal'),
                 TextColumn::make('tipo')->sortable()->badge(),
                 TextColumn::make('status')->sortable()->badge(),
                 TextColumn::make('numero_sigec')->searchable(),
-                TextColumn::make('numero_transferegov')->searchable(),
-                TextColumn::make('celebracao'),
-                TextColumn::make('vigencia'),
+                //TextColumn::make('numero_transferegov')->searchable(),
+                //TextColumn::make('celebracao')->date('d/m/Y'),
+                //TextColumn::make('vigencia')->date('d/m/Y'),
                 TextColumn::make('entidade'),
 
             ])

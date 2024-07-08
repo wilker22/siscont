@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\MonitoramentoResource\Pages;
 use App\Filament\Resources\MonitoramentoResource\RelationManagers;
+use App\Models\Fiscal;
 use App\Models\Monitoramento;
 use Filament\Forms;
 use Filament\Forms\Components\RichEditor;
@@ -21,24 +22,40 @@ class MonitoramentoResource extends Resource
 {
     protected static ?string $model = Monitoramento::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
     public static function form(Form $form): Form
     {
         return $form->columns(1)
             ->schema([
-                Select::make('instrumento')->required(),
+                Select::make('fiscal_id')
+                    ->relationship('fiscal', 'nome')
+                    ->label('Fiscal')
+                    ->options(Fiscal::all()->pluck('nome', 'id')->toArray())
+                    ->reactive()
+                    ->afterStateUpdated(fn (callable $set) => $set('instrumento_id', null)),
+                Select::make('instrumento_id')
+                    ->relationship('instrumento', 'numero_sigec')
+                    ->label('Instrumento')
+                    ->options(function (callable $get) {
+                        $fiscal = Fiscal::find($get('fiscal_id'));
+                        if (!$fiscal) {
+                            return Fiscal::all()->pluck('nome', 'id');
+                        }
+                        return $fiscal->instrumentos->pluck('numero_sigec', 'id');
+                    }),
+
                 RichEditor::make('andamento'),
                 RichEditor::make('dificuldades'),
                 RichEditor::make('atores'),
                 RichEditor::make('providencias'),
-                TextInput::make('objeto'),
-                TextInput::make('latitude'),
-                TextInput::make('longitude'),
-                TextInput::make('entidade'),
-                TextInput::make('beneficiarios'),
-                TextInput::make('foto'),
-                TextInput::make('status'),
+                //TextInput::make('objeto')->relationship('instrumento', 'objeto')->disabledOn('edit'),
+                //  TextInput::make('latitude'),
+                // TextInput::make('longitude'),
+                TextInput::make('instrumento.entidade'),
+                // TextInput::make('beneficiarios'),
+                // TextInput::make('foto'),
+                TextInput::make('instrumento.status'),
 
             ]);
     }

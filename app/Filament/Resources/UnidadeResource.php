@@ -19,7 +19,7 @@ class UnidadeResource extends Resource
 {
     protected static ?string $model = Unidade::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-home';
 
     protected static ?string $recordTitleAttribute = 'name';
 

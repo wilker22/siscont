@@ -20,7 +20,7 @@ class FiscalResource extends Resource
 {
     protected static ?string $model = Fiscal::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -37,7 +37,7 @@ class FiscalResource extends Resource
         return $form->columns()
             ->schema([
                 Select::make('unidade_id')
-                    ->relationship('unidades', 'sigla')
+                    ->relationship('unidade', 'sigla')
                     ->label('Gerência/Unidade')
                     ->required(),
                 TextInput::make('nome')->required(),
@@ -50,10 +50,10 @@ class FiscalResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('unidade_id')->label('Gerência/Unidade'),
-                TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('nome')->sortable()->searchable(),
                 TextColumn::make('email'),
                 TextColumn::make('matricula'),
+                TextColumn::make('unidade.sigla')->badge()->label('Gerência/Unidade')->searchable(),
             ])
             ->filters([
                 //

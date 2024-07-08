@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Monitoramento extends Model
 {
@@ -21,8 +23,13 @@ class Monitoramento extends Model
     ];
 
 
-    public function instrumentos()
+    public function instrumento(): BelongsTo
     {
         return $this->belongsTo(Instrumento::class);
+    }
+
+    public function fiscal(): BelongsTo
+    {
+        return $this->belongsTo(Fiscal::class);
     }
 }

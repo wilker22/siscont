@@ -20,7 +20,7 @@ class MesoregiaoResource extends Resource
 {
     protected static ?string $model = Mesoregiao::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-map';
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static ?string $navigationGroup = 'Cadastros';
@@ -53,9 +53,9 @@ class MesoregiaoResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
