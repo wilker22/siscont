@@ -5,12 +5,17 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MonitoramentoResource\Pages;
 use App\Filament\Resources\MonitoramentoResource\RelationManagers;
 use App\Models\Fiscal;
+use App\Models\Instrumento;
 use App\Models\Monitoramento;
 use Filament\Forms;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -26,7 +31,7 @@ class MonitoramentoResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form->columns(1)
+        return $form->columns(3)
             ->schema([
                 Select::make('fiscal_id')
                     ->relationship('fiscal', 'nome')
@@ -36,6 +41,12 @@ class MonitoramentoResource extends Resource
                     ->afterStateUpdated(fn (callable $set) => $set('instrumento_id', null)),
                 Select::make('instrumento_id')
                     ->relationship('instrumento', 'numero_sigec')
+                    ->relationship('instrumento', 'objeto')
+                    ->relationship('instrumento', 'entidade')
+                    ->relationship('instrumento', 'valor_global')
+                    ->relationship('instrumento', 'valor_empenhado')
+                    ->relationship('instrumento', 'valor_pago')
+                    ->relationship('instrumento', 'tipo')
                     ->label('Instrumento')
                     ->options(function (callable $get) {
                         $fiscal = Fiscal::find($get('fiscal_id'));
@@ -43,19 +54,42 @@ class MonitoramentoResource extends Resource
                             return Fiscal::all()->pluck('nome', 'id');
                         }
                         return $fiscal->instrumentos->pluck('numero_sigec', 'id');
+                    })
+                    ->live()
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        $set('objeto', Instrumento::find($get('instrumento_id'))->objeto);
+                    })
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        $set('entidade', Instrumento::find($get('instrumento_id'))->entidade);
+                    })
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        $set('valor_global', Instrumento::find($get('instrumento_id'))->valor_global);
+                    })
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        $set('valor_empenhado', Instrumento::find($get('instrumento_id'))->valor_empenhado);
+                    })
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        $set('valor_pago', Instrumento::find($get('instrumento_id'))->valor_pago);
+                    })
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        $set('tipo', Instrumento::find($get('instrumento_id'))->tipo);
                     }),
 
-                RichEditor::make('andamento'),
-                RichEditor::make('dificuldades'),
-                RichEditor::make('atores'),
-                RichEditor::make('providencias'),
-                //TextInput::make('objeto')->relationship('instrumento', 'objeto')->disabledOn('edit'),
-                //  TextInput::make('latitude'),
-                // TextInput::make('longitude'),
-                TextInput::make('instrumento.entidade'),
-                // TextInput::make('beneficiarios'),
-                // TextInput::make('foto'),
-                TextInput::make('instrumento.status'),
+                Section::make('Dados do Instrumento')->schema([
+                    TextInput::make('tipo')->disabled(),
+                    TextInput::make('entidade')->disabled()->columnSpan(2),
+                    Textarea::make('objeto')->disabled()->columnSpan(3),
+                    TextInput::make('valor_global')->disabled(),
+                    TextInput::make('valor_empenhado')->disabled(),
+                    TextInput::make('valor_pago')->disabled(),
+                ])->columns(3),
+
+                Section::make('Plano de Ação')->schema([
+                    RichEditor::make('andamento'),
+                    RichEditor::make('dificuldades'),
+                    RichEditor::make('atores'),
+                    RichEditor::make('providencias'),
+                ])->columns(2)
 
             ]);
     }
