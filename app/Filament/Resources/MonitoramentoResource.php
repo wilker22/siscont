@@ -79,9 +79,9 @@ class MonitoramentoResource extends Resource
                     TextInput::make('tipo')->disabled(),
                     TextInput::make('entidade')->disabled()->columnSpan(2),
                     Textarea::make('objeto')->disabled()->columnSpan(3),
-                    TextInput::make('valor_global')->disabled(),
-                    TextInput::make('valor_empenhado')->disabled(),
-                    TextInput::make('valor_pago')->disabled(),
+                    TextInput::make('valor_global')->disabled()->prefix('R$'),
+                    TextInput::make('valor_empenhado')->disabled()->prefix('R$'),
+                    TextInput::make('valor_pago')->disabled()->prefix('R$'),
                 ])->columns(3),
 
                 Section::make('Plano de Ação')->schema([
@@ -98,7 +98,7 @@ class MonitoramentoResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('foto'),
+                //TextColumn::make('foto'),
                 TextColumn::make('instrumento')->sortable()->searchable(),
                 TextColumn::make('objeto'),
                 TextColumn::make('entidade')->sortable()->searchable(),
@@ -110,6 +110,8 @@ class MonitoramentoResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -13,6 +13,14 @@ class Monitoramento extends Model
 
     protected $fillable = [
         'instrumento_id',
+        'tipo',
+        'fiscal_id',
+        'numero_sigec',
+        'objeto',
+        'entidade',
+        'valor_global',
+        'valor_empenhado',
+        'valor_pago',
         'andamento',
         'dificuldades',
         'atores',

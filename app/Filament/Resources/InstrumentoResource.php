@@ -78,6 +78,7 @@ class InstrumentoResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -99,6 +100,7 @@ class InstrumentoResource extends Resource
             'index' => Pages\ListInstrumentos::route('/'),
             'create' => Pages\CreateInstrumento::route('/create'),
             'edit' => Pages\EditInstrumento::route('/{record}/edit'),
+            //'view' => Pages\ViewInstrumento::route('/{record}'),
         ];
     }
 }
