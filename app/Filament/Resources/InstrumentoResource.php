@@ -10,6 +10,7 @@ use App\Models\Instrumento;
 use DateTime;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -21,6 +22,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Leandrocfe\FilamentPtbrFormFields\Money;
 
 class InstrumentoResource extends Resource
 {
@@ -30,7 +32,7 @@ class InstrumentoResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form->columns(2)
+        return $form->columns(3)
             ->schema([
                 Select::make('fiscal_id')
                     ->relationship('fiscal', 'nome')
@@ -40,21 +42,31 @@ class InstrumentoResource extends Resource
                 Select::make('status')->options(StatusInstrumentoEnum::class)->searchable()->required(),
                 TextInput::make('numero_sigec')->label('Nº SIGEC'),
                 TextInput::make('numero_transferegov')->label('Nº TRANSFEREGOV'),
-                DatePicker::make('celebracao')->date('d/m/Y'),
-                DatePicker::make('vigencia')->date('d/m/Y'),
-                RichEditor::make('objeto')->required(),
-                Select::make('municipio_id')->relationship('municipios', 'nome')
-                    ->multiple()
-                    ->relationship('municipios', 'nome'),
-                TextInput::make('latitude'),
-                TextInput::make('longitude'),
                 TextInput::make('entidade')->required(),
-                TextInput::make('beneficiarios'),
-                FileUpload::make('foto')->directory('fotos_instrumentos')->disk('public')->image(),
-                TextInput::make('valor_global'),
-                TextInput::make('valor_empenhado'),
-                TextInput::make('valor_liquidado'),
-                TextInput::make('valor_pago'),
+                RichEditor::make('objeto')->required()->columnSpan(3),
+
+                Fieldset::make('Dados Gerais')->schema([
+                    DatePicker::make('celebracao')->date('d/m/Y'),
+                    DatePicker::make('vigencia')->date('d/m/Y')->label('Vencimento'),
+
+                    Select::make('municipio_id')->relationship('municipios', 'nome')
+                        ->multiple()
+                        ->relationship('municipios', 'nome')->columnSpan(2),
+                    TextInput::make('latitude'),
+                    TextInput::make('longitude'),
+
+                    TextInput::make('beneficiarios'),
+                    FileUpload::make('foto')->directory('fotos_instrumentos')->disk('public')->image(),
+                ]),
+
+
+                Fieldset::make('Valores')->schema([
+                    Money::make('valor_global'),
+                    Money::make('valor_empenhado'),
+                    Money::make('valor_liquidado'),
+                    Money::make('valor_pago'),
+                ])
+
 
             ]);
     }

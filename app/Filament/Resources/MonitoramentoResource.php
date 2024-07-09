@@ -8,6 +8,7 @@ use App\Models\Fiscal;
 use App\Models\Instrumento;
 use App\Models\Monitoramento;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -33,62 +34,64 @@ class MonitoramentoResource extends Resource
     {
         return $form->columns(3)
             ->schema([
-                Select::make('fiscal_id')
-                    ->relationship('fiscal', 'nome')
-                    ->label('Fiscal')
-                    ->options(Fiscal::all()->pluck('nome', 'id')->toArray())
-                    ->reactive()
-                    ->afterStateUpdated(fn (callable $set) => $set('instrumento_id', null)),
+                // Select::make('fiscal_id')
+                //     ->relationship('fiscal', 'nome')
+                //     ->label('Fiscal')
+                //     ->options(Fiscal::all()->pluck('nome', 'id')->toArray())
+                //     ->reactive()
+                //     ->afterStateUpdated(fn (callable $set) => $set('instrumento_id', null)),
                 Select::make('instrumento_id')
-                    ->relationship('instrumento', 'numero_sigec')
-                    ->relationship('instrumento', 'objeto')
-                    ->relationship('instrumento', 'entidade')
-                    ->relationship('instrumento', 'valor_global')
-                    ->relationship('instrumento', 'valor_empenhado')
-                    ->relationship('instrumento', 'valor_pago')
-                    ->relationship('instrumento', 'tipo')
-                    ->label('Instrumento')
-                    ->options(function (callable $get) {
-                        $fiscal = Fiscal::find($get('fiscal_id'));
-                        if (!$fiscal) {
-                            return Fiscal::all()->pluck('nome', 'id');
-                        }
-                        return $fiscal->instrumentos->pluck('numero_sigec', 'id');
-                    })
-                    ->live()
-                    ->afterStateUpdated(function (Get $get, Set $set) {
-                        $set('objeto', Instrumento::find($get('instrumento_id'))->objeto);
-                    })
-                    ->afterStateUpdated(function (Get $get, Set $set) {
-                        $set('entidade', Instrumento::find($get('instrumento_id'))->entidade);
-                    })
-                    ->afterStateUpdated(function (Get $get, Set $set) {
-                        $set('valor_global', Instrumento::find($get('instrumento_id'))->valor_global);
-                    })
-                    ->afterStateUpdated(function (Get $get, Set $set) {
-                        $set('valor_empenhado', Instrumento::find($get('instrumento_id'))->valor_empenhado);
-                    })
-                    ->afterStateUpdated(function (Get $get, Set $set) {
-                        $set('valor_pago', Instrumento::find($get('instrumento_id'))->valor_pago);
-                    })
-                    ->afterStateUpdated(function (Get $get, Set $set) {
-                        $set('tipo', Instrumento::find($get('instrumento_id'))->tipo);
-                    }),
+                    ->relationship('instrumento', 'numero_sigec')->label('Instrumento'),
+                // ->relationship('instrumento', 'objeto')
+                // ->relationship('instrumento', 'entidade')
+                // ->relationship('instrumento', 'valor_global')
+                // ->relationship('instrumento', 'valor_empenhado')
+                // ->relationship('instrumento', 'valor_pago')
+                // ->relationship('instrumento', 'tipo')
 
-                Section::make('Dados do Instrumento')->schema([
-                    TextInput::make('tipo')->disabled(),
-                    TextInput::make('entidade')->disabled()->columnSpan(2),
-                    Textarea::make('objeto')->disabled()->columnSpan(3),
-                    TextInput::make('valor_global')->disabled()->prefix('R$'),
-                    TextInput::make('valor_empenhado')->disabled()->prefix('R$'),
-                    TextInput::make('valor_pago')->disabled()->prefix('R$'),
-                ])->columns(3),
+                // ->options(function (callable $get) {
+                //     $fiscal = Fiscal::find($get('fiscal_id'));
+                //     if (!$fiscal) {
+                //         return Fiscal::all()->pluck('nome', 'id');
+                //     }
+                //     return $fiscal->instrumentos->pluck('numero_sigec', 'id');
+                // })
+                // ->live()
+                // ->afterStateUpdated(function (Get $get, Set $set) {
+                //     $set('objeto', Instrumento::find($get('instrumento_id'))->objeto);
+                // })
+                // ->afterStateUpdated(function (Get $get, Set $set) {
+                //     $set('entidade', Instrumento::find($get('instrumento_id'))->entidade);
+                // })
+                // ->afterStateUpdated(function (Get $get, Set $set) {
+                //     $set('valor_global', Instrumento::find($get('instrumento_id'))->valor_global);
+                // })
+                // ->afterStateUpdated(function (Get $get, Set $set) {
+                //     $set('valor_empenhado', Instrumento::find($get('instrumento_id'))->valor_empenhado);
+                // })
+                // ->afterStateUpdated(function (Get $get, Set $set) {
+                //     $set('valor_pago', Instrumento::find($get('instrumento_id'))->valor_pago);
+                // })
+                // ->afterStateUpdated(function (Get $get, Set $set) {
+                //     $set('tipo', Instrumento::find($get('instrumento_id'))->tipo);
+                // }),
+
+                // Section::make('Dados do Instrumento')->schema([
+                //     TextInput::make('tipo')->disabled(),
+                //     TextInput::make('entidade')->disabled()->columnSpan(2),
+                //     Textarea::make('objeto')->disabled()->columnSpan(3),
+                //     TextInput::make('valor_global')->disabled()->prefix('R$'),
+                //     TextInput::make('valor_empenhado')->disabled()->prefix('R$'),
+                //     TextInput::make('valor_pago')->disabled()->prefix('R$'),
+                // ])->columns(3),
 
                 Section::make('Plano de Ação')->schema([
-                    RichEditor::make('andamento'),
-                    RichEditor::make('dificuldades'),
-                    RichEditor::make('atores'),
-                    RichEditor::make('providencias'),
+                    Textarea::make('andamento'),
+                    Textarea::make('dificuldades'),
+                    Textarea::make('atores'),
+                    Textarea::make('providencias')->label('Providências'),
+                    DatePicker::make('prazo')->date('d/m/Y'),
+
                 ])->columns(2)
 
             ]);
@@ -98,12 +101,10 @@ class MonitoramentoResource extends Resource
     {
         return $table
             ->columns([
-                //TextColumn::make('foto'),
-                TextColumn::make('instrumento')->sortable()->searchable(),
-                TextColumn::make('objeto'),
-                TextColumn::make('entidade')->sortable()->searchable(),
-                TextColumn::make('status')->sortable(),
-                TextColumn::make('created_at')->date('d/m/Y H:i')->label('Data'),
+                TextColumn::make('instrumento.numero_sigec')->badge()->sortable()->searchable()->label('Número'),
+                TextColumn::make('instrumento.entidade')->sortable()->searchable()->label('Entidade'),
+                TextColumn::make('instrumento.status')->sortable(),
+                TextColumn::make('created_at')->date('d/m/Y H:i')->label('Data do Monitoramento '),
             ])
             ->filters([
                 //
