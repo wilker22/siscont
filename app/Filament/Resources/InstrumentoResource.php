@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\StatusInstrumentoEnum;
-use App\Enums\TipoInstrumentoEnum;
+//use App\Enums\StatusInstrumentoEnum;
+//use App\Enums\TipoInstrumentoEnum;
 use App\Filament\Resources\InstrumentoResource\Pages;
 use App\Filament\Resources\InstrumentoResource\RelationManagers;
 use App\Models\Instrumento;
@@ -37,9 +37,28 @@ class InstrumentoResource extends Resource
                 Select::make('fiscal_id')
                     ->relationship('fiscal', 'nome')
                     ->label('Fiscal')
+                    ->searchable()
                     ->required(),
-                Select::make('tipo')->options(TipoInstrumentoEnum::class)->searchable()->required(),
-                Select::make('status')->options(StatusInstrumentoEnum::class)->searchable()->required(),
+                Select::make('tipo')
+                    ->options([
+                        'CONTRATO' => 'Contrato',
+                        'CONVENIO' => 'Convênio',
+                        'Ordem_de_Fornecimento' => 'Ordem de Fornecimento',
+                        'Ordem_de_Serviço' => 'Ordem de Serviço',
+                        'ACORDO_COOPERACAO_TECNICA' => 'Acordo de Cooperação Técnica',
+                        'CARTA_CONTRATO' => 'Carta Contrato',
+                        'CONTRATO_CESSAO' => 'Contrato de Cessão',
+                        'CONTRATO_CONCESSAO' => 'Contrato de Concessao',
+                        'TERMO_COMPROMISSO' => 'Termo de Compromisso',
+                        'TERMO_PARCERIA' => 'Termo de Parceria',
+                    ])
+                    ->searchable()
+                    ->required(),
+                Select::make('status')->options([
+                    'EXECUCAO' => 'Em Execução',
+                    'PARALISADO' => 'Paralisado',
+                    'CONCLUIDO' => 'Concluído',
+                ])->required(),
                 TextInput::make('numero_sigec')->label('Nº SIGEC'),
                 TextInput::make('numero_transferegov')->label('Nº TRANSFEREGOV'),
                 TextInput::make('entidade')->required(),
@@ -49,9 +68,11 @@ class InstrumentoResource extends Resource
                     DatePicker::make('celebracao')->date('d/m/Y'),
                     DatePicker::make('vigencia')->date('d/m/Y')->label('Vencimento'),
 
-                    Select::make('municipio_id')->relationship('municipios', 'nome')
+                    Select::make('municipio_id')
+                        ->relationship('municipios', 'nome')
                         ->multiple()
-                        ->relationship('municipios', 'nome')->columnSpan(2),
+                        ->columnSpan(2),
+
                     TextInput::make('latitude'),
                     TextInput::make('longitude'),
 
@@ -75,14 +96,15 @@ class InstrumentoResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('fiscal.nome')->sortable()->searchable()->label('Fiscal'),
                 TextColumn::make('tipo')->sortable()->badge(),
-                TextColumn::make('status')->sortable()->badge(),
                 TextColumn::make('numero_sigec')->searchable(),
+                TextColumn::make('fiscal.nome')->sortable()->searchable()->label('Fiscal'),
+                TextColumn::make('entidade'),
+                //TextColumn::make('status')->sortable()->badge(),
                 //TextColumn::make('numero_transferegov')->searchable(),
                 //TextColumn::make('celebracao')->date('d/m/Y'),
                 //TextColumn::make('vigencia')->date('d/m/Y'),
-                TextColumn::make('entidade'),
+
 
             ])
             ->filters([
