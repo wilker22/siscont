@@ -59,6 +59,7 @@ class AdminPanelProvider extends PanelProvider
                 // PanelsRenderHook::BODY_END,
                 PanelsRenderHook::FOOTER,
                 fn () => view('footer')
-            )->spa();
+            )->spa()
+            ->favicon(asset('images/monitor.ico'));
     }
 }
