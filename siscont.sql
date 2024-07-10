@@ -41,7 +41,7 @@ CREATE TABLE `failed_jobs` (
 
 --
 -- Estrutura da tabela `fiscals`
---
+---------
 
 CREATE TABLE `fiscals` (
   `id` bigint(20) UNSIGNED NOT NULL,
