@@ -22,6 +22,7 @@ enum TipoInstrumentoEnum: string implements HasLabel, HasColor
     case TERMO_COMPROMISSO = 'Termo de Tompromisso';
     case TERMO_PARCERIA = 'Termo de Parceria';
     case Termo_de_Entrega_Definitiva_de_Obra = 'Termo de Entrega Definitiva de Obra';
+    case Termo_de Doação
 
 
     public function getLabel(): ?string
